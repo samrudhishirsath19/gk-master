@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+     body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    .main-content {
+      max-width: 600px;
+      margin: 60px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 25px;
+    }
+
+    .category-btn {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      margin: 10px 0;
+      background: #007BFF;
+      color: white;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .category-btn:hover {
+      background-color: #0056b3;
+    }
+    </style>
+</head>
+<body>
+    
+<main class="main-content">
+    <h2>Select a Quiz Category</h2>
+    <button class="category-btn" onclick="startQuiz('Science')">Science</button>
+    <button class="category-btn" onclick="startQuiz('History')">History</button>
+    <button class="category-btn" onclick="startQuiz('Sports')">Sports</button>
+    <button class="category-btn" onclick="startQuiz('Geography')">Geography</button>
+</main>
+
+<script>
+    function startQuiz(category) {
+      localStorage.setItem('quizCategory', category);
+      window.location.href = 'quiz.html';
+    }
+</script>
+</body>
+</html>
