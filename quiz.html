@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+    <style>
+     body {
+      font-family: Arial, sans-serif;
+      background: #f1f1f1;
+      margin: 0;
+      padding: 0;
+    }
+
+    .main-content {
+      max-width: 600px;
+      margin: 60px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 25px;
+    }
+
+    .option-btn {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background: #e0e0e0;
+      cursor: pointer;
+    }
+
+    .option-btn:hover {
+      background-color: #d0d0d0;
+    }
+
+    .correct {
+      background-color: #4CAF50 !important;
+      color: white;
+    }
+
+    .wrong {
+      background-color: #f44336 !important;
+      color: white;
+    }
+
+    #nextBtn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    #nextBtn:hover {
+      background-color: #0056b3;
+    }
+    </style>
+</head>
+<body>
+<main class="main-content">
+    <h2 id="question">Loading...</h2>
+    <div id="options"></div>
+    <button id="nextBtn" onclick="nextQuestion()">Next</button>
+</main>
+
+<script>
+    const questions = {
+      Science: [
+        {
+          question: "What planet is known as the Red Planet?",
+          options: ["Earth", "Mars", "Jupiter", "Venus"],
+          answer: "Mars"
+        },
+        {
+          question: "What gas do plants absorb?",
+          options: ["Oxygen", "Hydrogen", "Carbon Dioxide", "Nitrogen"],
+          answer: "Carbon Dioxide"
+        },
+        {
+          question: "Which part of the plant conducts photosynthesis?",
+          options: ["Root", "Stem", "Leaf", "Flower"],
+          answer: "Leaf"  
+        },
+        {
+          question: "Which vitamin is produced when sunlight hits the skin?",
+          options: ["Vitamin A", "Vitamin B", "Vitamin C", "Vitamin D"],
+          answer: "Vitamin D"  
+        },
+        {
+          question: "Which of these is NOT a state of matter?",
+          options: ["Solid", "Liquid", "Element", "Gas"],
+          answer: "Element"  
+        },
+      ],
+      History: [
+        {
+          question: "Who was the first president of India?",
+          options: ["APJ Abdul Kalam", "Jawaharlal Nehru", "Dr. Rajendra Prasad", "Mahatma Gandhi"],
+          answer: "Dr. Rajendra Prasad"
+        },
+        {
+          question: "In which year did India gain independence?",
+          options: ["1945", "1947", "1950", "1952"],
+          answer: "1947"
+        },
+        {
+          question: "Who was known as the 'Iron Man of India'?",
+          options: ["Lal Bahadur Shastri", "Subhas Chandra Bose", "Sardar Vallabhbhai Patel", "Mahatma Gandhi"],
+          answer: "Sardar Vallabhbhai Patel"
+        },
+        {
+          question: "Which movement was started by Mahatma Gandhi in 1942?",
+          options: ["Non-Cooperation Movement", "Dandi March", "Quit India Movement", "Civil Disobedience Movement"],
+          answer: "Quit India Movement"
+        },
+        {
+          question: "Who was the founder of the Maurya Empire?",
+          options: ["Ashoka", "Bindusara", "Chandragupta Maurya", "Harshavardhana"],
+          answer: "Chandragupta Maurya"
+        },
+      ],
+      Sports: [
+        {
+          question: "Which country won the 2011 Cricket World Cup?",
+          options: ["Australia", "India", "Pakistan", "Sri Lanka"],
+          answer: "India"
+        },
+        {
+          question: "Who is known as the ‘God of Cricket’?",
+          options: ["Rahul Dravid", "MS Dhoni", "Virat Kohli", "Sachin Tendulkar"],
+          answer: "Sachin Tendulkar"
+        },
+        {
+          question: "In which sport is the term ‘love’ used?",
+          options: ["Cricket", "Football", "Tennis", "Basketball"],
+          answer: "Tennis"
+        },
+        {
+           question: "Which country has won the most FIFA World Cups?",
+           options: ["Germany", "Italy", "Argentina", "Brazil"],
+           answer: "Brazil"
+        },
+        {
+           question: "Which IPL team does Virat Kohli play for?",
+           options: ["Chennai Super Kings", "Royal Challengers Bengaluru", "Mumbai Indians", "Delhi Capitals"],
+           answer: "Royal Challengers Bengaluru"
+        },
+      ],
+      Geography: [
+        {
+          question: "Which is the largest continent?",
+          options: ["Africa", "Asia", "Europe", "Australia"],
+          answer: "Asia"
+        },
+        {
+          question: "What is the capital city of Australia?",
+          options: ["Sydney", "Melbourne", "Perth", "Canberra"],
+          answer: "Canberra"
+        },
+        {
+          question: "Which river is the longest in the world?",
+          options: ["Amazon", "Yangtze", "Nile", "Mississippi"],
+          answer: "Nile"
+        },
+        {
+          question: "Which country has the largest population?",
+          options: ["USA", "India", "China", "Indonesia"],
+          answer: "China"
+        },
+        {
+          question: "Mount Everest is located in which mountain range?",
+          options: ["Andes", "Himalayas", "Alps", "Rockies"],
+          answer: "Himalayas"
+        },
+      ]
+    };
+
+    const quizCategory = localStorage.getItem('quizCategory') || 'Science';
+    let currentIndex = 0;
+    let score = 0;
+    const quizData = questions[quizCategory];
+    const questionEl = document.getElementById('question');
+    const optionsEl = document.getElementById('options');
+    const nextBtn = document.getElementById('nextBtn');
+
+    function showQuestion() {
+      const current = quizData[currentIndex];
+      questionEl.textContent = current.question;
+      optionsEl.innerHTML = '';
+
+      current.options.forEach(option => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.textContent = option;
+        btn.onclick = () => selectAnswer(btn, current.answer);
+        optionsEl.appendChild(btn);
+      });
+
+      nextBtn.style.display = 'none';
+    }
+
+    function selectAnswer(button, correct) {
+      const buttons = document.querySelectorAll('.option-btn');
+      buttons.forEach(btn => {
+        btn.disabled = true;
+        if (btn.textContent === correct) btn.classList.add('correct');
+        else if (btn === button) btn.classList.add('wrong');
+      });
+
+      if (button.textContent === correct) score++;
+      nextBtn.style.display = 'inline-block';
+    }
+
+    function nextQuestion() {
+      currentIndex++;
+      if (currentIndex < quizData.length) {
+        showQuestion();
+      } else {
+        localStorage.setItem('quizScore', score);
+        localStorage.setItem('quizTotal', quizData.length);
+        window.location.href = 'result.html';
+      }
+    }
+
+    showQuestion();
+</script>
+</body>
+</html>
