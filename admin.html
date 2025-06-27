@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 0;
+    }
+
+    .main-content {
+      max-width: 600px;
+      margin: 50px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    button {
+      background-color: #007BFF;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .question-list {
+      margin-top: 30px;
+    }
+
+    .question-item {
+      background: #f0f0f0;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+    }
+    </style>
+</head>
+<body>
+<main class="main-content">
+    <h2>Admin Panel - Add New Question</h2>
+    <form id="questionForm">
+      <select id="category" required>
+        <option value="">Select Category</option>
+        <option value="Science">Science</option>
+        <option value="History">History</option>
+        <option value="Sports">Sports</option>
+        <option value="Geography">Geography</option>
+      </select>
+      <input type="text" id="questionText" placeholder="Enter Question" required />
+      <input type="text" id="opt1" placeholder="Option A" required />
+      <input type="text" id="opt2" placeholder="Option B" required />
+      <input type="text" id="opt3" placeholder="Option C" required />
+      <input type="text" id="opt4" placeholder="Option D" required />
+      <input type="text" id="answer" placeholder="Correct Answer (A/B/C/D)" required />
+      <button type="submit">Add Question</button>
+    </form>
+
+    <div class="question-list" id="questionList"></div>
+</main>
+
+<script>
+    const form = document.getElementById('questionForm');
+    const list = document.getElementById('questionList');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const category = document.getElementById('category').value;
+      const q = document.getElementById('questionText').value;
+      const optA = document.getElementById('opt1').value;
+      const optB = document.getElementById('opt2').value;
+      const optC = document.getElementById('opt3').value;
+      const optD = document.getElementById('opt4').value;
+      const ans = document.getElementById('answer').value.toUpperCase();
+
+      if (!['A', 'B', 'C', 'D'].includes(ans)) {
+        alert('Correct answer must be A, B, C, or D');
+        return;
+      }
+
+      const optionMap = { A: optA, B: optB, C: optC, D: optD };
+      const question = {
+        question: q,
+        options: [optA, optB, optC, optD],
+        answer: optionMap[ans]
+      };
+
+      const key = `adminQuestions_${category}`;
+      const existing = JSON.parse(localStorage.getItem(key)) || [];
+      existing.push(question);
+      localStorage.setItem(key, JSON.stringify(existing));
+
+      alert('Question added!');
+      form.reset();
+      showQuestions(category);
+    });
+
+    function showQuestions(category) {
+      const key = `adminQuestions_${category}`;
+      const data = JSON.parse(localStorage.getItem(key)) || [];
+      list.innerHTML = `<h3>${category} Questions:</h3>`;
+      data.forEach((q, i) => {
+        list.innerHTML += `<div class="question-item"><strong>Q${i + 1}:</strong> ${q.question}</div>`;
+      });
+    }
+</script>
+</body>
+</html>
