@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result</title>
+    <style>
+     body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 0;
+    }
+
+    .main-content {
+      max-width: 500px;
+      margin: 80px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    #score {
+      font-size: 24px;
+      color: #007BFF;
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+    </style>
+</head>
+<body>
+<main class="main-content">
+    <h2>🎉 Your Result</h2>
+    <div id="score">Loading...</div>
+    <button onclick="goToDashboard()">Take Another Quiz</button>
+</main>
+
+<script>
+    const score = localStorage.getItem('quizScore') || 0;
+    const total = localStorage.getItem('quizTotal') || 1;
+    const username = localStorage.getItem('username') || 'Guest';
+
+    document.getElementById('score').innerText = `${username}, you scored ${score} out of ${total}`;
+
+    function goToDashboard() {
+      window.location.href = 'dashboard.html';
+    }
+</script>
+</body>
+</html>
